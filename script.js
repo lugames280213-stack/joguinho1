@@ -390,3 +390,6 @@ function atualizarPlacar() {
         });
     });
 }
+// Adicione isso dentro do objeto defaultGame:
+playerId: '_' + Math.random().toString(36).substr(2, 9),
+playerName: "Jogador Anônimo",
