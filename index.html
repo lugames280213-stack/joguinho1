@@ -102,3 +102,24 @@
     <script src="script.js"></script>
 </body>
 </html>
+<button class="tab-btn" onclick="switchTab('leaderboard')">Rank Mundial</button>
+
+<div id="leaderboard" class="tab-content hidden">
+    <h3>🏆 Top 10 Jogadores</h3>
+    <div id="nickname-section" class="upgrade-item">
+        <input type="text" id="playerNameInput" placeholder="Seu apelido" maxlength="15" style="padding: 5px; border-radius: 4px; border: none; width: 60%;">
+        <button onclick="saveNickname()">Salvar Nome</button>
+    </div>
+    <table id="leaderboardTable" style="width: 100%; border-collapse: collapse; margin-top: 15px; text-align: left;">
+        <thead>
+            <tr style="border-bottom: 2px solid var(--accent);">
+                <th style="padding: 8px;">Posição</th>
+                <th>Nome</th>
+                <th>Moedas</th>
+            </tr>
+        </thead>
+        <tbody id="leaderboardRows">
+            </tbody>
+    </table>
+    <p style="font-size: 0.8rem; color: #aaa; margin-top: 10px; text-align: center;">Atualiza automaticamente a cada 5 minutos.</p>
+</div>
