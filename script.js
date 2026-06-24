@@ -1,5 +1,6 @@
 // --- Estado do Jogo (Game Data) ---
-const defaultGame = {
+const defaultGame = { playerId: '_' + Math.random().toString(36).substr(2, 9),
+    playerName: "Jogador Anônimo"
     coins: 0,
     totalCoins: 0,
     level: 1,
@@ -14,8 +15,7 @@ const defaultGame = {
     lastSaveTime: Date.now(),
     eventActive: false
 };
-playerId: '_' + Math.random().toString(36).substr(2, 9),
-    playerName: "Jogador Anônimo"
+
 };
 
 let game = JSON.parse(JSON.stringify(defaultGame));
@@ -324,7 +324,7 @@ fbDb.onload = function() {
     const firebaseConfig = {
         apiKey: "AIzaSyAs1hbX0vrpCqm01MlnmaVq0mqwLSUFAeQ",
         authDomain: "idle-game-clicker.firebaseapp.com",
-        databaseURL: "https://SEU_PROJETO-default-rtdb.firebaseio.com",
+        databaseURL: "https://idle-game-clicker-default-rtdb.firebaseio.com" ,
         projectId: "idle-game-clicker",
         storageBucket: "idle-game-clicker.firebasestorage.app",
         messagingSenderId: "819281089897",
