@@ -302,3 +302,91 @@ function closeModal() {
 
 // Iniciar o jogo
 window.onload = init;
+// --- SISTEMA DE RANK MUNDIAL (FIREBASE) ---
+
+// Carrega os scripts do Firebase dinamicamente
+const fbApp = document.createElement('script');
+fbApp.src = "https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js";
+const fbDb = document.createElement('script');
+fbDb.src = "https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js";
+document.head.appendChild(fbApp);
+document.head.appendChild(fbDb);
+
+fbDb.onload = function() {
+    // ⚠️ CONFIGURAÇÃO DO FIREBASE
+    // Você precisa criar uma conta gratuita no Firebase Console, gerar um projeto web e colar suas chaves aqui:
+    const firebaseConfig = {
+        apiKey: "AIzaSyAs1hbX0vrpCqm01MlnmaVq0mqwLSUFAeQ",
+        authDomain: "idle-game-clicker.firebaseapp.com",
+        databaseURL: "https://SEU_PROJETO-default-rtdb.firebaseio.com",
+        projectId: "idle-game-clicker",
+        storageBucket: "idle-game-clicker.firebasestorage.app",
+        messagingSenderId: "819281089897",
+        appId: "1:819281089897:web:4e41bff30d5766fd76d9f8"
+    };
+    
+    // Inicializa o Firebase apenas se as chaves forem preenchidas
+    if(firebaseConfig.apiKey !== "SUA_API_KEY") {
+        firebase.initializeApp(firebaseConfig);
+        
+        // Envia a pontuação inicial e configura os loops de 5 minutos
+        enviarPontuacao();
+        atualizarPlacar();
+        
+        setInterval(enviarPontuacao, 300000); // Envia os dados do jogador a cada 5 min
+        setInterval(atualizarPlacar, 300000);  // Puxa o rank mundial a cada 5 min
+    }
+};
+
+// Salva o apelido que o jogador digitou
+function saveNickname() {
+    let input = document.getElementById('playerNameInput');
+    if(input.value.trim() !== "") {
+        game.playerName = input.value.trim();
+        saveGame();
+        enviarPontuacao();
+        alert("Apelido salvo com sucesso!");
+    }
+}
+
+// Envia os dados do jogador atual para o servidor
+function enviarPontuacao() {
+    if(typeof firebase === "undefined" || !firebase.apps.length) return;
+    
+    firebase.database().ref('leaderboard/' + game.playerId).set({
+        name: game.playerName,
+        score: Math.floor(game.totalCoins), // Usamos totalCoins para evitar trapaças de quem gasta tudo
+        lastUpdate: Date.now()
+    });
+}
+
+// Puxa o Top 10 do servidor e desenha na tela
+function atualizarPlacar() {
+    if(typeof firebase === "undefined" || !firebase.apps.length) return;
+    
+    const leaderboardRef = firebase.database().ref('leaderboard');
+    // Ordena por pontuação e pega os 10 maiores
+    leaderboardRef.orderByChild('score').limitToLast(10).once('value', (snapshot) => {
+        const rowsContainer = document.getElementById('leaderboardRows');
+        rowsContainer.innerHTML = "";
+        
+        let jogadores = [];
+        snapshot.forEach((childSnapshot) => {
+            jogadores.push(childSnapshot.val());
+        });
+        
+        // O Firebase envia do menor para o maior, então invertemos a lista
+        jogadores.reverse();
+        
+        jogadores.forEach((jogador, index) => {
+            const tr = document.createElement('tr');
+            tr.style.borderBottom = "1px solid #444";
+            tr.innerHTML = `
+                <td style="padding: 8px; font-weight: bold; color: ${index === 0 ? 'var(--gold)' : 'white'}">#${index + 1}</td>
+                <td>${jogador.name}</td>
+                <td style="color: var(--gold)">${formatNumber(jogador.score)}</td>
+            `;
+            rowsContainer.appendChild(tr);
+        });
+    });
+}
