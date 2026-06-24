@@ -294,16 +294,10 @@ function closeModal() {
     document.getElementById('offlineModal').classList.add('hidden');
 }
 
-// --- CONEXÃO RANK MUNDIAL (FIREBASE) ---
-const fbApp = document.createElement('script');
-fbApp.src = "https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js";
-const fbDb = document.createElement('script');
-fbDb.src = "https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js";
-document.head.appendChild(fbApp);
-document.head.appendChild(fbDb);
+// --- CONEXÃO RANK MUNDIAL (FIREBASE) ---// --- CONEXÃO RANK MUNDIAL (FIREBASE) ---
 
-fbDb.onload = function() {
-    // ⚠️ COLOQUE SUAS CHAVES REAIS DO FIREBASE AQUI:
+window.addEventListener('DOMContentLoaded', () => {
+    // ⚠️ SUBSTITUA COM SUAS CHAVES REAIS DO FIREBASE AQUI:
     const firebaseConfig = {
         apiKey: "AIzaSyAs1hbX0vrpCqm01MlnmaVq0mqwLSUFAeQ",
         authDomain: "idle-game-clicker.firebaseapp.com",
@@ -311,22 +305,24 @@ fbDb.onload = function() {
         projectId: "idle-game-clicker",
         storageBucket: "idle-game-clicker.firebasestorage.app",
         messagingSenderId: "819281089897",
-        appId: "819281089897"
+        appId: "1:819281089897:web:4e41bff30d5766fd76d9f8"
     };
     
-    if(typeof firebase !== "undefined") {
+    if (typeof firebase !== "undefined") {
+        if (!firebase.apps.length) {
+            firebase.initializeApp(firebaseConfig);
+        }
         
-        enviarPontuacao();
         atualizarPlacar();
         
-        setInterval(enviarPontuacao, 300000); // Envia pontos a cada 5 min
-        setInterval(atualizarPlacar, 300000);  // Atualiza rank a cada 5 min
+        setInterval(enviarPontuacao, 300000); 
+        setInterval(atualizarPlacar, 300000);  
     }
-};
+});
 
 function saveNickname() {
     let input = document.getElementById('playerNameInput');
-    if(input && input.value.trim() !== "") {
+    if (input && input.value.trim() !== "") {
         game.playerName = input.value.trim();
         saveGame();
         enviarPontuacao();
@@ -335,25 +331,30 @@ function saveNickname() {
 }
 
 function enviarPontuacao() {
-    if(typeof firebase === "undefined" || !firebase.apps.length) return;
+    if (typeof firebase === "undefined" || !firebase.apps.length) return;
+    
     firebase.database().ref('leaderboard/' + game.playerId).set({
         name: game.playerName,
         score: Math.floor(game.totalCoins),
         lastUpdate: Date.now()
+    }).then(() => {
+        atualizarPlacar();
+    }).catch((error) => {
+        console.error("Erro ao enviar pontuação: ", error);
     });
 }
 
 function atualizarPlacar() {
-    if(typeof firebase === "undefined" || !firebase.apps.length) return;
+    if (typeof firebase === "undefined" || !firebase.apps.length) return;
     
     const leaderboardRef = firebase.database().ref('leaderboard');
     leaderboardRef.orderByChild('score').limitToLast(10).once('value', (snapshot) => {
         const rowsContainer = document.getElementById('leaderboardRows');
-        if(!rowsContainer) return;
+        if (!rowsContainer) return;
         rowsContainer.innerHTML = "";
         
         let jogadores = [];
-        snapshot.forEach((childSnapshot) => { joggers.push(childSnapshot.val()); });
+        snapshot.forEach((childSnapshot) => { jogadores.push(childSnapshot.val()); });
         jogadores.reverse();
         
         jogadores.forEach((jogador, index) => {
