@@ -332,7 +332,7 @@ fbDb.onload = function() {
     };
     
     // Inicializa o Firebase apenas se as chaves forem preenchidas
-    if(firebaseConfig.apiKey !== "SUA_API_KEY") {
+    if(firebaseConfig.apiKey !== "AIzaSyAs1hbX0vrpCqm01MlnmaVq0mqwLSUFAeQ") {
         firebase.initializeApp(firebaseConfig);
         
         // Envia a pontuação inicial e configura os loops de 5 minutos
