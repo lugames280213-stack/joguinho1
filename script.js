@@ -14,7 +14,13 @@ const defaultGame = {
     lastSaveTime: Date.now(),
     eventActive: false
 };
+playerId: '_' + Math.random().toString(36).substr(2, 9),
+    playerName: "Jogador Anônimo"
+};
 
+let game = JSON.parse(JSON.stringify(defaultGame));
+let fps = 30;
+let saveInterval;
 let game = JSON.parse(JSON.stringify(defaultGame));
 let fps = 30;
 let saveInterval;
@@ -390,6 +396,4 @@ function atualizarPlacar() {
         });
     });
 }
-// Adicione isso dentro do objeto defaultGame:
-playerId: '_' + Math.random().toString(36).substr(2, 9),
-playerName: "Jogador Anônimo",
+
