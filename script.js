@@ -314,8 +314,7 @@ fbDb.onload = function() {
         appId: "819281089897"
     };
     
-    if(firebaseConfig.apiKey !== "AIzaSyAs1hbX0vrpCqm01MlnmaVq0mqwLSUFAeQ") {
-        firebase.initializeApp(firebaseConfig);
+    if(typeof firebase !== "undefined") {
         
         enviarPontuacao();
         atualizarPlacar();
