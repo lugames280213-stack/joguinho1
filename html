@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Epic Idle Clicker</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <section class="main-clicker">
+            <div class="stats">
+                <h1>Moedas: <span id="coinCount">0</span></h1>
+                <p>Moedas por segundo: <span id="cps">0</span></p>
+                <p>Nível: <span id="level">1</span> | XP: <span id="xp">0</span>/<span id="xpNeeded">100</span></p>
+                <div class="xp-bar-container"><div id="xp-bar"></div></div>
+            </div>
+            
+            <div class="click-area" id="clickArea">
+                <div class="click-object" id="mainObject">💎</div>
+            </div>
+
+            <div class="events-area">
+                <button id="chestBtn" class="hidden" onclick="openChest()">🎁 Baú Disponível!</button>
+                <div id="eventDisplay" class="hidden">⚡ EVENTO: GANHOS 2X! ⚡</div>
+            </div>
+        </section>
+
+        <section class="systems">
+            <nav class="tabs">
+                <button class="tab-btn active" onclick="switchTab('upgrades')">Upgrades</button>
+                <button class="tab-btn" onclick="switchTab('pets')">Pets</button>
+                <button class="tab-btn" onclick="switchTab('missions')">Missões</button>
+                <button class="tab-btn" onclick="switchTab('prestige')">Prestígio</button>
+            </nav>
+
+            <div id="upgrades" class="tab-content active">
+                <h3>Melhorias de Clique</h3>
+                <div class="upgrade-item" onclick="buyClickUpgrade()">
+                    <div class="info">
+                        <h4>Força do Dedo</h4>
+                        <p>+1 Moeda/clique (Nvl: <span id="clickUpLvl">0</span>)</p>
+                    </div>
+                    <button id="clickUpCost">Custa: 10</button>
+                </div>
+
+                <h3>Geradores Automáticos</h3>
+                <div class="upgrade-item" onclick="buyAutoGenerator()">
+                    <div class="info">
+                        <h4>Trabalhador</h4>
+                        <p>+1 Moeda/seg (Qtd: <span id="autoGenCount">0</span>)</p>
+                    </div>
+                    <button id="autoGenCost">Custa: 50</button>
+                </div>
+            </div>
+
+            <div id="pets" class="tab-content hidden">
+                <h3>Companheiros (Bônus Multiplicador)</h3>
+                <div class="upgrade-item" onclick="buyPet()">
+                    <div class="info">
+                        <h4>Cachorro Fiel 🐕</h4>
+                        <p>+10% na produção global</p>
+                    </div>
+                    <button id="petCost">Custa: 1000</button>
+                </div>
+                <p>Multiplicador de Pets: <span id="petMultiplier">1</span>x</p>
+            </div>
+
+            <div id="missions" class="tab-content hidden">
+                <h3>Missão Diária</h3>
+                <div class="mission-item">
+                    <p id="missionText">Clique 100 vezes!</p>
+                    <p>Progresso: <span id="missionProgress">0</span>/100</p>
+                    <button id="claimMissionBtn" disabled onclick="claimMission()">Resgatar Recompensa</button>
+                </div>
+            </div>
+
+            <div id="prestige" class="tab-content hidden">
+                <h3>Renascimento</h3>
+                <p>Reinicie todo o seu progresso em troca de poder permanente!</p>
+                <p>Moedas necessárias: 1.000.000</p>
+                <p>Bônus atual: +<span id="prestigeBonus">0</span>% produção</p>
+                <button id="prestigeBtn" onclick="doPrestige()" disabled>Realizar Prestígio</button>
+            </div>
+            
+            <div class="save-controls">
+                <button onclick="saveGame()">Salvar Manualmente</button>
+                <button onclick="resetGame()" class="danger">Resetar Tudo</button>
+            </div>
+        </section>
+    </div>
+
+    <div id="offlineModal" class="modal hidden">
+        <div class="modal-content">
+            <h2>Bem-vindo de volta!</h2>
+            <p>Enquanto você esteve fora, seus trabalhadores coletaram:</p>
+            <h3 id="offlineEarnings">0 Moedas</h3>
+            <button onclick="closeModal()">Coletar</button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
